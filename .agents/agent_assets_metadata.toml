@@ -1,0 +1,14 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "mwgJGHnNgVVy1NBaAvScL"
+uri = "file://artifacts/ishay-infotech/public/images/hero-bg.png"
+type = "image"
+title = "Hero background abstract mesh"
+
+[[generated]]
+id = "OKkb_V-Lu3tOc3C8qjFwH"
+uri = "file://artifacts/ishay-infotech/public/images/about-img.png"
+type = "image"
+title = "Professional IT enterprise office"
