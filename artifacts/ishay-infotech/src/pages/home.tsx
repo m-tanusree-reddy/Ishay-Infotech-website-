@@ -884,7 +884,7 @@ export default function Home() {
               <ul className="space-y-3 font-medium text-slate-600 dark:text-slate-400">
                 <li>info@ishayinfotech.com</li>
                 <li>+91 (987) 654-3210</li>
-                <li>Mumbai, India</li>
+                <li>Bengaluru, India</li>
               </ul>
             </div>
           </div>
