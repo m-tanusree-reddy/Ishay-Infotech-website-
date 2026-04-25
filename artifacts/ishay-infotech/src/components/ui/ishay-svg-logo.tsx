@@ -1,9 +1,9 @@
 import React from "react";
 
 const IshaySVGLogo = ({ className }: { className?: string }) => (
-  <svg 
-    viewBox="0 0 200 60" 
-    fill="none" 
+  <svg
+    viewBox="0 0 200 60"
+    fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
   >

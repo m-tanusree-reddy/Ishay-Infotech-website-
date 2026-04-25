@@ -71,6 +71,17 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* iSHAY Infotech Logo Colors Overrides */
+  --color-blue-400: #1F3E97; 
+  --color-blue-500: #173079;
+  --color-blue-600: #001C7E;
+  --color-blue-700: #00145c;
+  
+  /* iSHAY Burgundy/Red Overrides for Accents */
+  --color-red-500: #F04E23;
+  --color-red-600: #9D0B0E;
+  --color-red-700: #660507;
 }
 
 /* LIGHT MODE */
@@ -92,10 +103,10 @@
   --popover-foreground: 222 47% 11%;
   --popover-border: 220 13% 91%;
 
-  /* iSHAY Blue: #1d4ed8 -> 224 76% 48% */
-  --primary: 224 76% 48%;
+  /* iSHAY Blue: #001C7E Navy -> 227 100% 25% */
+  --primary: 227 100% 25%;
   --primary-foreground: 0 0% 100%;
-  --primary-border: 224 76% 48%;
+  --primary-border: 227 100% 25%;
 
   --secondary: 220 14% 96%;
   --secondary-foreground: 222 47% 11%;
@@ -115,7 +126,7 @@
 
   --border: 220 13% 91%;
   --input: 220 13% 91%;
-  --ring: 224 76% 48%;
+  --ring: 227 100% 25%;
 
   --app-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --app-font-serif: Georgia, serif;
@@ -153,9 +164,9 @@
   --popover-foreground: 210 40% 98%;
   --popover-border: 222 40% 18%;
 
-  --primary: 217 91% 60%;
+  --primary: 224 66% 60%;
   --primary-foreground: 222 47% 7%;
-  --primary-border: 217 91% 60%;
+  --primary-border: 224 66% 60%;
 
   --secondary: 222 40% 16%;
   --secondary-foreground: 210 40% 98%;
@@ -175,7 +186,7 @@
 
   --border: 222 40% 18%;
   --input: 222 40% 20%;
-  --ring: 217 91% 60%;
+  --ring: 224 66% 60%;
 
   --primary-border: hsl(var(--primary));
   --primary-border: hsl(from hsl(var(--primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);

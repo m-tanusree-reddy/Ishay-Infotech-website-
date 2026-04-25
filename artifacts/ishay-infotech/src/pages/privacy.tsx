@@ -56,8 +56,8 @@ export default function PrivacyPolicy() {
 
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white mt-10 mb-4">5. Contact Us</h2>
           <p>
-            If you have questions or comments about this Privacy Policy, please contact us at: <br/>
-            <strong className="text-slate-800 dark:text-slate-200">Email:</strong> info@ishayinfotech.com <br/>
+            If you have questions or comments about this Privacy Policy, please contact us at: <br />
+            <strong className="text-slate-800 dark:text-slate-200">Email:</strong> info@ishayinfotech.com <br />
             <strong className="text-slate-800 dark:text-slate-200">Based in:</strong> Mumbai, India
           </p>
         </div>
