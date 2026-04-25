@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ShieldCheck, 
-  Cpu, 
-  Server, 
-  Users, 
+import {
+  ShieldCheck,
+  Cpu,
+  Server,
+  Users,
   Menu,
   X,
   Mail,
@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
 import IshaySVGLogo from "@/components/ui/ishay-svg-logo";
+import logoImg from "@/assets/logo.jpg";
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzz6XbF273YvLmsO2Y-gqfQfP0aE1pBwED_87TqC1O8sH9Z7yYkHhPxrG_KxNYY1wL4/exec";
 
@@ -185,7 +186,7 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 dark:bg-black/40 backdrop-blur-xl border-b border-slate-200 dark:border-white/10 shadow-sm transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <button onClick={() => scrollToSection("home")} className="flex items-center gap-2 group cursor-pointer">
-            <IshaySVGLogo className="h-10 w-auto text-slate-900 dark:text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform" />
+            <img src={logoImg} alt="iSHAY Infotech" className="h-12 w-auto object-contain flex-shrink-0 group-hover:scale-105 transition-transform" />
           </button>
 
           {/* Desktop Nav */}
@@ -264,21 +265,21 @@ export default function Home() {
       <section id="home" className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden flex items-center justify-center min-h-[90vh]">
         {/* Ambient Background */}
         <div className="absolute inset-0 bg-[#070b14]">
-          <motion.div 
-            animate={{ 
+          <motion.div
+            animate={{
               scale: [1, 1.2, 1],
               opacity: [0.3, 0.5, 0.3],
             }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/4 -left-1/4 w-[800px] h-[800px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none mix-blend-screen" 
+            className="absolute top-1/4 -left-1/4 w-[800px] h-[800px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none mix-blend-screen"
           />
-          <motion.div 
-            animate={{ 
+          <motion.div
+            animate={{
               scale: [1, 1.3, 1],
               opacity: [0.2, 0.4, 0.2],
             }}
             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute -bottom-1/4 -right-1/4 w-[800px] h-[800px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none mix-blend-screen" 
+            className="absolute -bottom-1/4 -right-1/4 w-[800px] h-[800px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none mix-blend-screen"
           />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none opacity-50" />
         </div>
@@ -352,8 +353,8 @@ export default function Home() {
               { label: "Uptime Delivered", value: "99.99%" },
               { label: "Threats Mitigated", value: "10M+" },
             ].map((stat, i) => (
-              <motion.div 
-                key={i} 
+              <motion.div
+                key={i}
                 className="text-center p-4 relative z-10"
                 whileHover={{ scale: 1.1, color: "#60a5fa" }}
                 transition={{ type: "spring", stiffness: 300 }}
@@ -391,12 +392,12 @@ export default function Home() {
               >
                 {/* Hover gradient backdrop */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${s.color} opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`} />
-                <motion.div 
+                <motion.div
                   className="absolute -right-20 -top-20 w-64 h-64 bg-gradient-to-br from-white/10 to-transparent dark:from-white/5 rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
                 />
-                
+
                 <div className="relative z-10">
-                  <motion.div 
+                  <motion.div
                     whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
                     transition={{ duration: 0.5 }}
                     className={`w-16 h-16 rounded-3xl flex items-center justify-center mb-8 bg-white dark:bg-[#070b14] border ${s.border} shadow-lg shadow-black/5 group-hover:bg-transparent group-hover:border-white/50 dark:group-hover:border-white/20 transition-all duration-500`}
@@ -407,15 +408,15 @@ export default function Home() {
                   <p className="text-slate-600/90 dark:text-slate-400 mb-10 leading-relaxed font-medium text-[16px]">
                     {s.description}
                   </p>
-                  
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {s.features.map((feature, idx) => (
-                      <motion.div 
+                      <motion.div
                         initial={{ opacity: 0, x: -10 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.3 + (idx * 0.1) }}
-                        key={idx} 
+                        key={idx}
                         className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-100/50 dark:hover:bg-white/5 transition-colors"
                       >
                         <div className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center flex-shrink-0">
@@ -435,12 +436,12 @@ export default function Home() {
       {/* ── ABOUT US (VISION/MISSION) ── */}
       <section id="about" className="py-32 bg-white dark:bg-[#070b14] relative overflow-hidden">
         {/* Background Gradients */}
-        <motion.div 
-          animate={{ rotate: 180, scale: [1, 1.2, 1] }} 
+        <motion.div
+          animate={{ rotate: 180, scale: [1, 1.2, 1] }}
           transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
           className="absolute -left-64 top-0 w-[800px] h-[800px] bg-blue-500/5 dark:bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"
         />
-        
+
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Left: Content */}
@@ -450,7 +451,7 @@ export default function Home() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <motion.div 
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="inline-block px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-extrabold uppercase tracking-widest mb-8 border border-blue-200 dark:border-blue-500/20 shadow-[0_0_20px_rgba(37,99,235,0.1)]"
               >
@@ -459,7 +460,7 @@ export default function Home() {
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-8 tracking-tight text-slate-900 dark:text-white leading-[1.1]">
                 Pioneering <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">Digital Innovation</span> & Security.
               </h2>
-              
+
               <div className="prose prose-slate dark:prose-invert max-w-none mb-10">
                 <p className="text-lg text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
                   Founded by a team of visionary IT professionals, <strong className="text-slate-900 dark:text-white">iSHAY Infotech</strong> is built on the foundation of delivering uncompromising quality in the digital landscape. We bridge the gap between complex technological challenges and elegant, scalable solutions.
@@ -476,11 +477,11 @@ export default function Home() {
                   { value: "100%", label: "Secure by Design" },
                   { value: "24/7", label: "Strategic Support" },
                 ].map((stat, idx) => (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.1, duration: 0.5 }}
-                    key={stat.label} 
+                    key={stat.label}
                     className="flex flex-col gap-1"
                   >
                     <span className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white">{stat.value}</span>
@@ -499,10 +500,10 @@ export default function Home() {
               className="relative space-y-6"
             >
               {/* Highlight backdrop */}
-              <motion.div 
-                animate={{ rotate: [12, -12, 12], scale: [1, 1.1, 1] }} 
+              <motion.div
+                animate={{ rotate: [12, -12, 12], scale: [1, 1.1, 1] }}
                 transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-1/4 right-1/4 w-3/4 h-3/4 bg-blue-600/10 dark:bg-blue-400/10 rounded-[60px] blur-3xl -z-10 mix-blend-multiply dark:mix-blend-screen" 
+                className="absolute top-1/4 right-1/4 w-3/4 h-3/4 bg-blue-600/10 dark:bg-blue-400/10 rounded-[60px] blur-3xl -z-10 mix-blend-multiply dark:mix-blend-screen"
               />
 
               {[
@@ -519,7 +520,7 @@ export default function Home() {
                   className="p-6 md:p-8 rounded-[2rem] border border-slate-200/50 dark:border-white/5 bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl shadow-lg shadow-blue-900/5 hover:shadow-[0_30px_60px_-15px_rgba(37,99,235,0.2)] dark:hover:shadow-[0_30px_60px_-15px_rgba(37,99,235,0.15)] hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group flex gap-6 items-start"
                 >
                   <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-500/10 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                  
+
                   <div className="w-14 h-14 rounded-[1.25rem] bg-blue-50/80 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0 shadow-inner ring-1 ring-blue-500/20 group-hover:bg-blue-600 group-hover:text-white group-hover:ring-blue-500/50 transition-all duration-500">
                     <item.icon className="w-7 h-7" />
                   </div>
@@ -563,7 +564,7 @@ export default function Home() {
               >
                 {/* Glowing hover backdrop */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
-                
+
                 <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-6 shadow-lg ${item.shadow} text-white transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
                   <item.icon className="w-8 h-8" />
                 </div>
@@ -592,9 +593,9 @@ export default function Home() {
               Niche talent across every critical technology domain — sourced & delivered within 72 hours.
             </p>
           </div>
-          
+
           <div className="relative w-[150%] left-[-25%] flex justify-center mask-image-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)] pointer-events-none">
-            <motion.div 
+            <motion.div
               animate={{ x: [0, -1000] }}
               transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
               className="flex flex-wrap flex-col h-[280px] content-start gap-4 md:gap-5 w-[max-content] pb-8 pr-10"
@@ -622,7 +623,7 @@ export default function Home() {
       {/* ── FAQ ── */}
       <section id="faq" className="py-24 bg-slate-50 dark:bg-[#030712] border-y border-slate-200 dark:border-white/5 relative">
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-500/5 dark:bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
-        
+
         <div className="max-w-4xl mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight text-slate-900 dark:text-white">
@@ -648,7 +649,7 @@ export default function Home() {
                   className="w-full text-left py-6 px-8 flex items-center justify-between gap-6 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
                 >
                   <span className="font-bold text-lg md:text-xl tracking-tight text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{faq.question}</span>
-                  <motion.div 
+                  <motion.div
                     animate={{ rotate: openFaq === i ? 180 : 0 }}
                     className="w-10 h-10 rounded-full border-2 border-slate-200/60 dark:border-white/10 flex items-center justify-center flex-shrink-0 group-hover:border-blue-500/50 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 transition-all scale-100 group-hover:scale-110"
                   >
@@ -679,15 +680,15 @@ export default function Home() {
       {/* ── CONTACT ── */}
       <section id="contact" className="py-32 bg-white dark:bg-[#02050f] relative overflow-hidden">
         {/* Glow */}
-        <motion.div 
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }} 
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-0 left-1/2 w-[800px] h-[400px] bg-blue-600/10 dark:bg-blue-600/20 rounded-[100%] blur-[100px] -translate-x-1/2 translate-y-1/2 pointer-events-none z-0" 
+          className="absolute bottom-0 left-1/2 w-[800px] h-[400px] bg-blue-600/10 dark:bg-blue-600/20 rounded-[100%] blur-[100px] -translate-x-1/2 translate-y-1/2 pointer-events-none z-0"
         />
-        <motion.div 
-          animate={{ scale: [1, 1.1, 1], rotate: [0, 90, 0] }} 
+        <motion.div
+          animate={{ scale: [1, 1.1, 1], rotate: [0, 90, 0] }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none z-0" 
+          className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none z-0"
         />
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -723,10 +724,10 @@ export default function Home() {
                 { icon: Globe, title: "Operations", value: "Indian Sub-continent & Africa" },
                 { icon: MapPin, title: "Locations", value: "Mumbai, India & Field Locations" },
               ].map((item, i) => (
-                <motion.div 
+                <motion.div
                   whileHover={{ x: 10 }}
                   transition={{ type: "spring", stiffness: 300 }}
-                  key={i} 
+                  key={i}
                   className="flex gap-6 group items-center p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
                 >
                   <div className="w-16 h-16 rounded-[1.25rem] bg-white dark:bg-white/[0.03] border border-slate-200/60 dark:border-white/5 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:border-blue-600 group-hover:text-white transition-all duration-500 shadow-lg shadow-black/5 group-hover:shadow-[0_20px_40px_-10px_rgba(37,99,235,0.4)]">
@@ -756,7 +757,7 @@ export default function Home() {
               className="p-8 md:p-12 rounded-[2.5rem] bg-white/80 border border-slate-200/60 dark:bg-black/20 dark:border-white/5 backdrop-blur-2xl shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] dark:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.4)] relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] pointer-events-none" />
-              
+
               {submitted ? (
                 <div className="text-center py-16">
                   <div className="w-20 h-20 bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -856,7 +857,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-6 opacity-90 hover:opacity-100 transition-opacity">
-                <IshaySVGLogo className="h-8 w-auto text-slate-900 dark:text-white" />
+                <img src={logoImg} alt="iSHAY Infotech" className="h-12 md:h-14 w-auto object-contain flex-shrink-0" />
                 <span className="text-[11px] font-bold text-slate-500 tracking-[0.2em] uppercase mt-1">
                   Pvt Ltd
                 </span>
@@ -865,7 +866,7 @@ export default function Home() {
                 Pioneering innovation across the Indian Sub-continent and Africa. Delivering excellence in Cybersecurity, AI, and IT Solutions.
               </p>
             </div>
-            
+
             <div>
               <h4 className="text-slate-900 dark:text-white font-bold mb-6 tracking-wide">Quick Links</h4>
               <ul className="space-y-3 font-medium text-slate-600 dark:text-slate-400">
@@ -888,7 +889,7 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          
+
           <div className="pt-8 border-t border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-[13px] font-medium text-slate-500 dark:text-slate-500">
             <p>© {new Date().getFullYear()} iSHAY Infotech Pvt Ltd. All rights reserved.</p>
             <div className="flex gap-6 text-slate-600 dark:text-slate-400">
