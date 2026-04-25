@@ -25,7 +25,9 @@ import {
   Activity,
   HeartHandshake,
   Clock,
-  Shield
+  Shield,
+  Target,
+  Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,6 +44,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
+import IshaySVGLogo from "@/components/ui/ishay-svg-logo";
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzz6XbF273YvLmsO2Y-gqfQfP0aE1pBwED_87TqC1O8sH9Z7yYkHhPxrG_KxNYY1wL4/exec";
 
@@ -51,28 +54,6 @@ const contactSchema = z.object({
   company: z.string().min(2, "Organization name is required."),
   message: z.string().min(10, "Message must be at least 10 characters long."),
 });
-
-// Using a custom SVG logo for generic use instead of the actual local one (if missing)
-const IshaySVGLogo = ({ className }: { className?: string }) => (
-  <svg 
-    viewBox="0 0 200 60" 
-    fill="none" 
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-  >
-    <path d="M40 30C40 46.5685 26.5685 60 10 60C-6.56854 60 -20 46.5685 -20 30C-20 13.4315 -6.56854 0 10 0C26.5685 0 40 13.4315 40 30Z" fill="url(#paint0_linear)" />
-    <path d="M20 30C20 35.5228 15.5228 40 10 40C4.47715 40 0 35.5228 0 30C0 24.4771 4.47715 20 10 20C15.5228 20 20 24.4771 20 30Z" fill="white" />
-    <text x="50" y="42" fontFamily="Arial, Helvetica, sans-serif" fontWeight="900" fontSize="42" fill="currentColor" letterSpacing="-1">
-      i<tspan fill="#2563eb">SHAY</tspan>
-    </text>
-    <defs>
-      <linearGradient id="paint0_linear" x1="-20" y1="0" x2="40" y2="60" gradientUnits="userSpaceOnUse">
-        <stop stopColor="#3b82f6" />
-        <stop offset="1" stopColor="#1d4ed8" />
-      </linearGradient>
-    </defs>
-  </svg>
-);
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -203,9 +184,9 @@ export default function Home() {
       {/* ── NAVBAR ── */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 dark:bg-black/40 backdrop-blur-xl border-b border-slate-200 dark:border-white/10 shadow-sm transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <IshaySVGLogo className="h-10 w-auto text-slate-900 dark:text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]" />
-          </Link>
+          <button onClick={() => scrollToSection("home")} className="flex items-center gap-2 group cursor-pointer">
+            <IshaySVGLogo className="h-10 w-auto text-slate-900 dark:text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform" />
+          </button>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
@@ -245,24 +226,34 @@ export default function Home() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
               className="md:hidden overflow-hidden bg-white dark:bg-[#070b14] border-b border-slate-200 dark:border-white/10"
             >
               <div className="px-6 py-6 flex flex-col gap-4">
-                {navLinks.map((link) => (
-                  <button
+                {navLinks.map((link, idx) => (
+                  <motion.button
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: idx * 0.1 }}
                     key={link.name}
                     onClick={() => scrollToSection(link.id)}
-                    className="text-left text-lg font-bold text-slate-800 dark:text-slate-200 py-2 border-b border-slate-100 dark:border-white/5"
+                    className="text-left text-lg font-bold text-slate-800 dark:text-slate-200 py-2 border-b border-slate-100 dark:border-white/5 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   >
                     {link.name}
-                  </button>
+                  </motion.button>
                 ))}
-                <Button
-                  className="mt-4 w-full rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold h-12"
-                  onClick={() => scrollToSection("contact")}
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: navLinks.length * 0.1 }}
                 >
-                  Get Started
-                </Button>
+                  <Button
+                    className="mt-4 w-full rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold h-12"
+                    onClick={() => scrollToSection("contact")}
+                  >
+                    Get Started
+                  </Button>
+                </motion.div>
               </div>
             </motion.div>
           )}
@@ -270,82 +261,106 @@ export default function Home() {
       </nav>
 
       {/* ── HERO SECTION ── */}
-      <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden flex items-center justify-center min-h-[90vh]">
+      <section id="home" className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden flex items-center justify-center min-h-[90vh]">
         {/* Ambient Background */}
         <div className="absolute inset-0 bg-[#070b14]">
-          <div className="absolute top-1/4 -left-1/4 w-[800px] h-[800px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none mix-blend-screen" />
-          <div className="absolute -bottom-1/4 -right-1/4 w-[800px] h-[800px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none mix-blend-screen" />
+          <motion.div 
+            animate={{ 
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-1/4 -left-1/4 w-[800px] h-[800px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none mix-blend-screen" 
+          />
+          <motion.div 
+            animate={{ 
+              scale: [1, 1.3, 1],
+              opacity: [0.2, 0.4, 0.2],
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute -bottom-1/4 -right-1/4 w-[800px] h-[800px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none mix-blend-screen" 
+          />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none opacity-50" />
         </div>
 
         <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.8, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 font-bold text-xs uppercase tracking-widest backdrop-blur-md mb-8 shadow-inner shadow-blue-500/20"
+            transition={{ duration: 0.8, type: "spring", bounce: 0.5 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 font-bold text-xs uppercase tracking-widest backdrop-blur-md mb-8 shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-shadow cursor-default"
           >
-            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6] animate-pulse" />
             Enterprise IT Excellence
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
+            transition={{ duration: 0.8, delay: 0.2, type: "spring", stiffness: 50 }}
             className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-8 tracking-tighter text-white drop-shadow-2xl"
           >
-            Architecting <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">Digital</span><br className="hidden md:block" /> Solutions
+            Architecting <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 animate-gradient-x">Digital</span><br className="hidden md:block" /> Solutions
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.8, delay: 0.4, type: "spring", stiffness: 50 }}
             className="text-lg md:text-2xl text-slate-300 max-w-3xl mx-auto mb-10 leading-relaxed font-medium"
           >
-            iSHAY Infotech delivers top-tier <strong className="text-white font-bold">IT Talent</strong>, <strong className="text-white font-bold">Cyber Security</strong> frameworks, and scalable <strong className="text-white font-bold">Enterprise Systems</strong> directly to your workflow.
+            iSHAY Infotech delivers top-tier <strong className="text-white font-bold tracking-wide">IT Talent</strong>, <strong className="text-white font-bold tracking-wide">Cyber Security</strong> frameworks, and scalable <strong className="text-white font-bold tracking-wide">Enterprise Systems</strong> directly to your workflow.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.8, delay: 0.6, type: "spring", stiffness: 50 }}
             className="flex flex-col sm:flex-row justify-center gap-4"
           >
-            <Button
-              size="lg"
-              className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold h-14 px-8 text-base shadow-[0_0_40px_-10px_rgba(37,99,235,0.5)] hover:shadow-[0_0_60px_-15px_rgba(37,99,235,0.7)] transition-all transform hover:-translate-y-1"
-              onClick={() => scrollToSection("services")}
-            >
-              Explore Solutions
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="rounded-xl h-14 px-8 font-bold text-base border-white/20 hover:bg-white/5 backdrop-blur-sm text-white"
-              onClick={() => scrollToSection("contact")}
-            >
-              Consult with Experts
-            </Button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                size="lg"
+                className="rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold h-14 px-8 text-base shadow-[0_0_40px_-10px_rgba(37,99,235,0.7)] hover:shadow-[0_0_60px_-10px_rgba(37,99,235,1)] transition-all border border-blue-400/20"
+                onClick={() => scrollToSection("services")}
+              >
+                Explore Solutions <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                size="lg"
+                variant="outline"
+                className="rounded-xl h-14 px-8 font-bold text-base border-slate-700 hover:bg-slate-800/50 backdrop-blur-sm text-white"
+                onClick={() => scrollToSection("contact")}
+              >
+                Consult with Experts
+              </Button>
+            </motion.div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 1.5 }}
-            className="mt-20 pt-10 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto backdrop-blur-sm bg-black/20 rounded-3xl"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2, duration: 1.2, type: "spring", bounce: 0.4 }}
+            className="mt-20 pt-10 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto backdrop-blur-sm bg-slate-900/40 rounded-3xl relative overflow-hidden"
           >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-[100%] animate-[shimmer_3s_infinite]" />
             {[
               { label: "Talent Recruited", value: "2,500+" },
-              { label: "Client Retension", value: "98%" },
+              { label: "Client Retention", value: "98%" },
               { label: "Uptime Delivered", value: "99.99%" },
               { label: "Threats Mitigated", value: "10M+" },
             ].map((stat, i) => (
-              <div key={i} className="text-center p-4">
-                <div className="text-3xl md:text-4xl font-extrabold text-white mb-2 tracking-tighter">{stat.value}</div>
-                <div className="text-xs font-bold text-slate-500 uppercase tracking-widest">{stat.label}</div>
-              </div>
+              <motion.div 
+                key={i} 
+                className="text-center p-4 relative z-10"
+                whileHover={{ scale: 1.1, color: "#60a5fa" }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <div className="text-3xl md:text-5xl font-extrabold text-white mb-2 tracking-tighter drop-shadow-lg">{stat.value}</div>
+                <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{stat.label}</div>
+              </motion.div>
             ))}
           </motion.div>
         </div>
@@ -367,30 +382,47 @@ export default function Home() {
             {services.map((s, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="group relative p-8 md:p-10 rounded-[2rem] bg-slate-50 dark:bg-black/30 border border-slate-200 dark:border-white/5 hover:border-transparent hover:shadow-2xl transition-all duration-500 overflow-hidden"
+                transition={{ duration: 0.6, delay: i * 0.15, type: "spring", stiffness: 100 }}
+                whileHover={{ y: -10 }}
+                className="group relative p-8 md:p-10 rounded-[2.5rem] bg-white/60 dark:bg-black/20 border border-slate-200/60 dark:border-white/5 hover:border-transparent hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.4)] transition-all duration-500 overflow-hidden backdrop-blur-xl"
               >
                 {/* Hover gradient backdrop */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${s.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                <div className={`absolute inset-0 bg-gradient-to-br ${s.color} opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`} />
+                <motion.div 
+                  className="absolute -right-20 -top-20 w-64 h-64 bg-gradient-to-br from-white/10 to-transparent dark:from-white/5 rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                />
                 
                 <div className="relative z-10">
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-white dark:bg-white/5 border ${s.border} shadow-sm group-hover:bg-transparent group-hover:border-transparent transition-all`}>
-                    <s.icon className="w-7 h-7 text-slate-900 dark:text-white" />
-                  </div>
-                  <h3 className="font-extrabold text-2xl mb-4 text-slate-900 dark:text-white tracking-tight">{s.title}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed font-medium text-[15px]">
+                  <motion.div 
+                    whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
+                    transition={{ duration: 0.5 }}
+                    className={`w-16 h-16 rounded-3xl flex items-center justify-center mb-8 bg-white dark:bg-[#070b14] border ${s.border} shadow-lg shadow-black/5 group-hover:bg-transparent group-hover:border-white/50 dark:group-hover:border-white/20 transition-all duration-500`}
+                  >
+                    <s.icon className="w-8 h-8 text-slate-900 dark:text-white" />
+                  </motion.div>
+                  <h3 className="font-black text-2xl lg:text-3xl mb-4 text-slate-900 dark:text-white tracking-tight">{s.title}</h3>
+                  <p className="text-slate-600/90 dark:text-slate-400 mb-10 leading-relaxed font-medium text-[16px]">
                     {s.description}
                   </p>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {s.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                        <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{feature}</span>
-                      </div>
+                      <motion.div 
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.3 + (idx * 0.1) }}
+                        key={idx} 
+                        className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-100/50 dark:hover:bg-white/5 transition-colors"
+                      >
+                        <div className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <span className="text-[13px] font-bold text-slate-700 dark:text-slate-300 leading-tight">{feature}</span>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
@@ -401,9 +433,16 @@ export default function Home() {
       </section>
 
       {/* ── ABOUT US (VISION/MISSION) ── */}
-      <section id="about" className="py-24 bg-white dark:bg-[#070b14] relative">
+      <section id="about" className="py-32 bg-white dark:bg-[#070b14] relative overflow-hidden">
+        {/* Background Gradients */}
+        <motion.div 
+          animate={{ rotate: 180, scale: [1, 1.2, 1] }} 
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          className="absolute -left-64 top-0 w-[800px] h-[800px] bg-blue-500/5 dark:bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"
+        />
+        
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Left: Content */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -411,58 +450,83 @@ export default function Home() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <div className="inline-block px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider mb-6 border border-blue-500/20">
-                Core Philosophy
-              </div>
-              <h2 className="text-4xl md:text-5xl font-extrabold mb-8 tracking-tight text-slate-900 dark:text-white">
-                Empowering Business & Humanity.
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                className="inline-block px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-extrabold uppercase tracking-widest mb-8 border border-blue-200 dark:border-blue-500/20 shadow-[0_0_20px_rgba(37,99,235,0.1)]"
+              >
+                About iSHAY Infotech
+              </motion.div>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-8 tracking-tight text-slate-900 dark:text-white leading-[1.1]">
+                Pioneering <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">Digital Innovation</span> & Security.
               </h2>
-              <div className="space-y-6">
+              
+              <div className="prose prose-slate dark:prose-invert max-w-none mb-10">
+                <p className="text-lg text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+                  Founded by a team of visionary IT professionals, <strong className="text-slate-900 dark:text-white">iSHAY Infotech</strong> is built on the foundation of delivering uncompromising quality in the digital landscape. We bridge the gap between complex technological challenges and elegant, scalable solutions.
+                </p>
+                <p className="text-[16px] text-slate-600/90 dark:text-slate-500 leading-relaxed mt-4">
+                  Whether building resilient enterprise architectures, securing infrastructure against emerging cyber threats, or sourcing elite tech talent, our approach remains fiercely client-first. We don't just write code or fill seats; we engineer growth.
+                </p>
+              </div>
+
+              {/* Stats/Highlight Row */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-6 border-t border-slate-200/60 dark:border-white/10">
                 {[
-                  { label: "Vision", text: "To assist customers to embrace the latest IT technologies in a way that benefits both business and humanity at large." },
-                  { label: "Mission", text: "Provide unparalleled experience in Information Security, Smart Solutions, Enterprise Solutions, and IT Talent Acquisition." },
-                  { label: "Objective", text: "Excellence through deep customer understanding — delivering high quality, economical solutions on time, every time." },
-                ].map((item, idx) => (
+                  { value: "72h", label: "Talent Delivery" },
+                  { value: "100%", label: "Secure by Design" },
+                  { value: "24/7", label: "Strategic Support" },
+                ].map((stat, idx) => (
                   <motion.div 
-                    key={item.label}
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.2 + (idx * 0.1), duration: 0.5 }}
-                    className="flex gap-4 items-start p-5 rounded-2xl bg-slate-50 dark:bg-white/[0.02] border border-slate-200 py-4 dark:border-white/5"
+                    transition={{ delay: idx * 0.1, duration: 0.5 }}
+                    key={stat.label} 
+                    className="flex flex-col gap-1"
                   >
-                    <div className="mt-1 w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 flex-shrink-0 shadow-[0_0_10px_rgba(37,99,235,0.8)]" />
-                    <div>
-                      <span className="font-extrabold text-slate-900 dark:text-white block mb-1 text-lg">{item.label}</span>
-                      <span className="text-[15px] text-slate-600 dark:text-slate-400 leading-relaxed font-medium">{item.text}</span>
-                    </div>
+                    <span className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white">{stat.value}</span>
+                    <span className="text-[13px] font-bold text-slate-500 uppercase tracking-wider">{stat.label}</span>
                   </motion.div>
                 ))}
               </div>
             </motion.div>
 
-            {/* Right: Feature grid */}
+            {/* Right: Core Philosophy Cards */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative"
+              transition={{ duration: 0.8, ease: "easeOut", staggerChildren: 0.2 }}
+              className="relative space-y-6"
             >
               {/* Highlight backdrop */}
-              <div className="absolute top-1/4 right-1/4 w-3/4 h-3/4 bg-blue-600/10 dark:bg-blue-400/10 rounded-[40px] rotate-12 blur-2xl -z-10" />
+              <motion.div 
+                animate={{ rotate: [12, -12, 12], scale: [1, 1.1, 1] }} 
+                transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-1/4 right-1/4 w-3/4 h-3/4 bg-blue-600/10 dark:bg-blue-400/10 rounded-[60px] blur-3xl -z-10 mix-blend-multiply dark:mix-blend-screen" 
+              />
 
-              {differentiators.map((d, i) => (
+              {[
+                { label: "Our Vision", desc: "To assist customers in embracing the latest IT technologies in a way that benefits both business outcomes and humanity at large.", icon: Globe },
+                { label: "Our Mission", desc: "Provide an unparalleled experience in Information Security, Smart Solutions, Enterprise Architectures, and elite IT Talent Acquisition.", icon: Target },
+                { label: "Our Objective", desc: "Deliver excellence through deep customer understanding—providing high-quality, economical solutions on time, every time.", icon: Zap },
+              ].map((item, idx) => (
                 <motion.div
-                  key={i}
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  className="p-6 rounded-3xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] backdrop-blur-sm shadow-sm hover:shadow-[0_20px_40px_-15px_rgba(37,99,235,0.15)] dark:hover:shadow-[0_20px_40px_-15px_rgba(37,99,235,0.1)] transition-all duration-300"
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  whileHover={{ x: -10, scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="p-6 md:p-8 rounded-[2rem] border border-slate-200/50 dark:border-white/5 bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl shadow-lg shadow-blue-900/5 hover:shadow-[0_30px_60px_-15px_rgba(37,99,235,0.2)] dark:hover:shadow-[0_30px_60px_-15px_rgba(37,99,235,0.15)] hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group flex gap-6 items-start"
                 >
-                  <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4 shadow-inner">
-                    <d.icon className="w-6 h-6" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-500/10 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  
+                  <div className="w-14 h-14 rounded-[1.25rem] bg-blue-50/80 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0 shadow-inner ring-1 ring-blue-500/20 group-hover:bg-blue-600 group-hover:text-white group-hover:ring-blue-500/50 transition-all duration-500">
+                    <item.icon className="w-7 h-7" />
                   </div>
-                  <h3 className="font-bold text-slate-900 dark:text-white text-base mb-2 tracking-tight">{d.title}</h3>
-                  <p className="text-[13px] text-slate-500 dark:text-slate-400 leading-relaxed font-medium">{d.description}</p>
+                  <div>
+                    <h3 className="font-extrabold text-slate-900 dark:text-white text-xl md:text-2xl mb-2 tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{item.label}</h3>
+                    <p className="text-[15px] md:text-[16px] text-slate-600 dark:text-slate-400 leading-relaxed font-medium">{item.desc}</p>
+                  </div>
                 </motion.div>
               ))}
             </motion.div>
@@ -513,30 +577,44 @@ export default function Home() {
 
       {/* ── DOMAIN EXPERTISE ── */}
       <section className="py-24 bg-white dark:bg-[#01030a]">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-4 tracking-tight text-slate-900 dark:text-white">IT Resource Domain Expertise</h2>
+        <div className="max-w-5xl mx-auto px-6 overflow-hidden relative pb-10">
+          <div className="text-center mb-16 relative z-10">
+            <motion.div
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex mb-6 bg-slate-900 dark:bg-white text-white dark:text-black rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest shadow-xl"
+            >
+              Our Coverage
+            </motion.div>
+            <h2 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-slate-900 dark:text-white">IT Resource Domain Expertise</h2>
             <p className="text-slate-500 dark:text-slate-400 text-lg font-medium">
               Niche talent across every critical technology domain — sourced & delivered within 72 hours.
             </p>
           </div>
-          <div className="flex flex-wrap justify-center gap-3 md:gap-4">
-            {[
-              "BigData", "SAP", "Data Science", "Machine Learning", "RPA", "DevOps",
-              "Full Stack", "Python", "Java", ".NET", "Cybersecurity", "Cloud Architecture", "Finance Tech",
-              "FinTech", "Accounting", "HR Systems", "MarTech", "Logistics", "Operations",
-            ].map((tag, i) => (
-              <motion.span
-                key={tag}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.03, duration: 0.4 }}
-                className="px-5 py-2.5 rounded-full border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.02] text-[13px] font-bold text-slate-600 dark:text-slate-300 hover:border-blue-500/50 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:shadow-[0_0_20px_-5px_rgba(37,99,235,0.3)] transition-all duration-300 cursor-default"
-              >
-                {tag}
-              </motion.span>
-            ))}
+          
+          <div className="relative w-[150%] left-[-25%] flex justify-center mask-image-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)] pointer-events-none">
+            <motion.div 
+              animate={{ x: [0, -1000] }}
+              transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
+              className="flex flex-wrap flex-col h-[280px] content-start gap-4 md:gap-5 w-[max-content] pb-8 pr-10"
+            >
+              {[
+                "BigData", "SAP", "Data Science", "Machine Learning", "RPA", "DevOps",
+                "Full Stack", "Python", "Java", ".NET", "Cybersecurity", "Cloud Architecture", "Finance Tech",
+                "FinTech", "Accounting", "HR Systems", "MarTech", "Logistics", "Operations",
+                "Smart Solutions", "SaaS Development", "Backend Infra", "IT Assessment", "AWS", "Azure",
+                "GCP", "Agile Management", "Data Warehousing", "IoT Integration"
+              ].map((tag, i) => (
+                <motion.span
+                  whileHover={{ scale: 1.1, backgroundColor: "#3b82f6", color: "white" }}
+                  key={`${tag}-${i}`}
+                  className="px-6 py-3 rounded-full border-2 border-slate-200/60 dark:border-white/10 bg-white/40 dark:bg-white/[0.03] backdrop-blur-xl text-[14px] font-bold text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:shadow-[0_0_30px_-5px_rgba(37,99,235,0.6)] cursor-crosshair transition-colors duration-300 w-max pointer-events-auto"
+                >
+                  {tag}
+                </motion.span>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>
@@ -559,24 +637,23 @@ export default function Home() {
             {faqs.map((faq, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                className="border-b border-slate-200 dark:border-white/10 last:border-0"
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                className="bg-white/60 dark:bg-black/20 border border-slate-200/50 dark:border-white/5 rounded-3xl mb-4 hover:border-blue-500/30 dark:hover:border-blue-400/30 transition-all duration-300"
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full text-left py-6 flex items-center justify-between gap-6 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
+                  className="w-full text-left py-6 px-8 flex items-center justify-between gap-6 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
                 >
-                  <span className="font-bold text-lg md:text-xl tracking-tight text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{faq.question}</span>
-                  <div className="w-8 h-8 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center flex-shrink-0 group-hover:border-blue-500/50 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 transition-all">
-                    {openFaq === i ? (
-                      <ChevronUp className="w-5 h-5 text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
-                    )}
-                  </div>
+                  <span className="font-bold text-lg md:text-xl tracking-tight text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{faq.question}</span>
+                  <motion.div 
+                    animate={{ rotate: openFaq === i ? 180 : 0 }}
+                    className="w-10 h-10 rounded-full border-2 border-slate-200/60 dark:border-white/10 flex items-center justify-center flex-shrink-0 group-hover:border-blue-500/50 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 transition-all scale-100 group-hover:scale-110"
+                  >
+                    <ChevronDown className="w-5 h-5 text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
+                  </motion.div>
                 </button>
                 <AnimatePresence>
                   {openFaq === i && (
@@ -585,9 +662,9 @@ export default function Home() {
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="overflow-hidden"
+                      className="overflow-hidden px-8"
                     >
-                      <p className="pb-8 pr-12 text-base text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                      <p className="pb-6 pt-2 text-[16px] text-slate-600/90 dark:text-slate-400 leading-relaxed font-medium">
                         {faq.answer}
                       </p>
                     </motion.div>
@@ -600,16 +677,33 @@ export default function Home() {
       </section>
 
       {/* ── CONTACT ── */}
-      <section id="contact" className="py-24 bg-white dark:bg-[#02050f] relative overflow-hidden">
+      <section id="contact" className="py-32 bg-white dark:bg-[#02050f] relative overflow-hidden">
         {/* Glow */}
-        <div className="absolute bottom-0 left-1/2 w-[800px] h-[400px] bg-blue-600/10 dark:bg-blue-600/10 rounded-[100%] blur-[100px] -translate-x-1/2 translate-y-1/2 pointer-events-none z-0" />
+        <motion.div 
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }} 
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-0 left-1/2 w-[800px] h-[400px] bg-blue-600/10 dark:bg-blue-600/20 rounded-[100%] blur-[100px] -translate-x-1/2 translate-y-1/2 pointer-events-none z-0" 
+        />
+        <motion.div 
+          animate={{ scale: [1, 1.1, 1], rotate: [0, 90, 0] }} 
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none z-0" 
+        />
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight text-slate-900 dark:text-white">
+          <div className="text-center max-w-2xl mx-auto mb-20">
+            <motion.div
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex mb-6 bg-slate-900 dark:bg-white text-white dark:text-black rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest shadow-xl"
+            >
+              Get in Touch
+            </motion.div>
+            <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tight text-slate-900 dark:text-white leading-tight">
               Ready to Accelerate?
             </h2>
-            <p className="text-slate-500 dark:text-slate-400 text-lg font-medium">
+            <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl font-medium leading-relaxed">
               We'll architect the exact IT staffing, cybersecurity, or software solution for your enterprise. Let's talk.
             </p>
           </div>
@@ -629,21 +723,26 @@ export default function Home() {
                 { icon: Globe, title: "Operations", value: "Indian Sub-continent & Africa" },
                 { icon: MapPin, title: "Locations", value: "Mumbai, India & Field Locations" },
               ].map((item, i) => (
-                <div key={i} className="flex gap-6 group">
-                  <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/5 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:border-blue-600 group-hover:text-white transition-all duration-300 shadow-sm">
-                    <item.icon className="w-6 h-6" />
+                <motion.div 
+                  whileHover={{ x: 10 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  key={i} 
+                  className="flex gap-6 group items-center p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                >
+                  <div className="w-16 h-16 rounded-[1.25rem] bg-white dark:bg-white/[0.03] border border-slate-200/60 dark:border-white/5 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:border-blue-600 group-hover:text-white transition-all duration-500 shadow-lg shadow-black/5 group-hover:shadow-[0_20px_40px_-10px_rgba(37,99,235,0.4)]">
+                    <item.icon className="w-7 h-7" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-[15px] mb-1.5 text-slate-400 dark:text-slate-500 uppercase tracking-widest">{item.title}</h3>
+                    <h3 className="font-bold text-[13px] mb-1.5 text-slate-500 uppercase tracking-widest">{item.title}</h3>
                     {item.link ? (
-                      <a href={item.link} className="text-lg font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                      <a href={item.link} className="text-xl font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                         {item.value}
                       </a>
                     ) : (
-                      <p className="text-lg font-bold text-slate-900 dark:text-white">{item.value}</p>
+                      <p className="text-xl font-bold text-slate-900 dark:text-white">{item.value}</p>
                     )}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </motion.div>
 
@@ -652,9 +751,12 @@ export default function Home() {
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="p-8 md:p-10 rounded-[2rem] bg-white border border-slate-200 dark:bg-white/[0.02] dark:border-white/5 backdrop-blur-xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)] relative"
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
+              className="p-8 md:p-12 rounded-[2.5rem] bg-white/80 border border-slate-200/60 dark:bg-black/20 dark:border-white/5 backdrop-blur-2xl shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] dark:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.4)] relative overflow-hidden"
             >
+              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] pointer-events-none" />
+              
               {submitted ? (
                 <div className="text-center py-16">
                   <div className="w-20 h-20 bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -782,7 +884,7 @@ export default function Home() {
               <ul className="space-y-3 font-medium text-slate-600 dark:text-slate-400">
                 <li>info@ishayinfotech.com</li>
                 <li>+91 (987) 654-3210</li>
-                <li>Mumbai, India</li>
+                <li>Bengaluru, India</li>
               </ul>
             </div>
           </div>
@@ -790,8 +892,8 @@ export default function Home() {
           <div className="pt-8 border-t border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-[13px] font-medium text-slate-500 dark:text-slate-500">
             <p>© {new Date().getFullYear()} iSHAY Infotech Pvt Ltd. All rights reserved.</p>
             <div className="flex gap-6 text-slate-600 dark:text-slate-400">
-              <a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Terms of Service</a>
+              <Link href="/privacy" className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">Terms of Service</Link>
             </div>
           </div>
         </div>
