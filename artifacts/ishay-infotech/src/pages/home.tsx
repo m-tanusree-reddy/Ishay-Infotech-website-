@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -56,6 +56,140 @@ const contactSchema = z.object({
   message: z.string().min(10, "Message must be at least 10 characters long."),
 });
 
+const navLinks = [
+  { name: "Services", id: "services" },
+  { name: "About Us", id: "about" },
+  { name: "Why Us", id: "why-us" },
+  { name: "FAQ", id: "faq" },
+  { name: "Contact", id: "contact" },
+];
+
+const heroStats = [
+  { label: "Talent Recruited", value: "2,500+" },
+  { label: "Client Retention", value: "98%" },
+  { label: "Uptime Delivered", value: "99.99%" },
+  { label: "Threats Mitigated", value: "10M+" },
+];
+
+const services = [
+  {
+    icon: Users,
+    title: "IT Talent Supply",
+    description: "Fast, reliable sourcing of prime IT resources across domains (SAP, BigData, App Dev, Testing, Cloud, CyberSecurity).",
+    features: ["Contract Staffing", "Direct Hire / FTE", "C-Level Executive Search", "Project-Based Teams"],
+    color: "from-blue-500/20 to-cyan-500/20",
+    border: "border-blue-500/30",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Cyber Security & Forensics",
+    description: "Comprehensive posture assessment, pentesting, compliance, and forensics from deep-domain experts.",
+    features: ["Vulnerability Assessment", "Cyber Forensics", "Identity & Access (IAM)", "Security Ops Center (SOC)"],
+    color: "from-violet-500/20 to-fuchsia-500/20",
+    border: "border-violet-500/30",
+  },
+  {
+    icon: Server,
+    title: "Enterprise Architecture",
+    description: "Scalable infrastructure and architectural framework planning aligning your IT seamlessly with business goals.",
+    features: ["Cloud Migration", "Infrastructure Design", "System Integration", "Performance Tuning"],
+    color: "from-amber-500/20 to-orange-500/20",
+    border: "border-amber-500/30",
+  },
+  {
+    icon: Cpu,
+    title: "Smart Solutions & AI",
+    description: "Embrace the future with robust ML/AI systems, RPAs, Big Data analytics, and embedded systems.",
+    features: ["Machine Learning Models", "RPA Automation", "Big Data Analytics", "IoT & Embedded"],
+    color: "from-emerald-500/20 to-teal-500/20",
+    border: "border-emerald-500/30",
+  },
+];
+
+const differentiators = [
+  { icon: Rocket, title: "Speed", description: "Expedite time-to-market with ready-to-deploy frameworks and talent networks." },
+  { icon: Shield, title: "Risk Mitigation", description: "Stringent vetting processes and secure-by-design development lifecycles." },
+  { icon: Activity, title: "Scalability", description: "Solutions engineered to grow effortlessly from MVP to Enterprise scale." },
+  { icon: Search, title: "Precision", description: "Exact matching of talent and tech to your highly specific business challenges." },
+];
+
+const aboutCards = [
+  { label: "Our Vision", desc: "To assist customers in embracing the latest IT technologies in a way that benefits both business outcomes and humanity at large.", icon: Globe },
+  { label: "Our Mission", desc: "Provide an unparalleled experience in Information Security, Smart Solutions, Enterprise Architectures, and elite IT Talent Acquisition.", icon: Target },
+  { label: "Our Objective", desc: "Deliver excellence through deep customer understanding—providing high-quality, economical solutions on time, every time.", icon: Zap },
+];
+
+const domainExpertiseTags = [
+  "BigData", "SAP", "Data Science", "Machine Learning", "RPA", "DevOps",
+  "Full Stack", "Python", "Java", ".NET", "Cybersecurity", "Cloud Architecture",
+  "Finance Tech", "FinTech", "Accounting", "HR Systems", "MarTech", "Logistics",
+  "Operations", "Smart Solutions", "SaaS Development", "Backend Infra", "IT Assessment",
+  "AWS", "Azure", "GCP", "Agile Management", "Data Warehousing", "IoT Integration"
+];
+
+const aboutStats = [
+  { value: "72h", label: "Talent Delivery" },
+  { value: "100%", label: "Secure by Design" },
+  { value: "24/7", label: "Strategic Support" },
+];
+
+const tagLabels = [
+  "BigData", "SAP", "Data Science", "Machine Learning", "RPA", "DevOps",
+  "Full Stack", "Python", "Java", ".NET", "Cybersecurity", "Cloud Architecture", "Finance Tech",
+  "FinTech", "Accounting", "HR Systems", "MarTech", "Logistics", "Operations",
+  "Smart Solutions", "SaaS Development", "Backend Infra", "IT Assessment", "AWS", "Azure",
+  "GCP", "Agile Management", "Data Warehousing", "IoT Integration",
+];
+
+const faqs = [
+  {
+    question: "What is your typical turnaround time for providing IT candidates?",
+    answer: "We leverage our extensive private talent pool to typically provide initial high-quality resumes within 48 to 72 hours for standard skill sets.",
+  },
+  {
+    question: "Do you offer project-based software development?",
+    answer: "Yes. In addition to staff augmentation, we take end-to-end ownership of software development and system integration projects across various domains.",
+  },
+  {
+    question: "How do you handle security assessments?",
+    answer: "Our certified ethical hackers and forensics specialists conduct deep-dive Vulnerability Assessments and Penetration Testing (VAPT), mimicking real-world attack scenarios to secure your infrastructure.",
+  },
+  {
+    question: "What geographies do you operate in?",
+    answer: "While incorporated in India, we seamlessly run operations and support clients across the Indian Sub-continent and regions of Africa.",
+  },
+];
+
+const contactInfo = [
+  { icon: Mail, title: "Email", value: "info@ishayinfotech.com", link: "mailto:info@ishayinfotech.com" },
+  { icon: Phone, title: "Phone", value: "+91 (987) 654-3210", link: "tel:+919876543210" },
+  { icon: Globe, title: "Operations", value: "Indian Sub-continent & Africa" },
+  { icon: MapPin, title: "Locations", value: "Mumbai, India & Field Locations" },
+];
+
+const quickLinks = [
+  "Services",
+  "About Us",
+  "Why Choose Us",
+  "FAQ",
+  "Contact",
+];
+
+const sectionReveal = {
+  hidden: { opacity: 0, y: 40 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.9, ease: "easeOut" } },
+};
+
+const staggerReveal = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.14, delayChildren: 0.1 } },
+};
+
+const itemReveal = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
+};
+
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -103,82 +237,14 @@ export default function Home() {
     }
   };
 
-  const scrollToSection = (id: string) => {
+  const scrollToSection = useCallback((id: string) => {
     setMobileMenuOpen(false);
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
-  };
+  }, []);
 
-  const navLinks = [
-    { name: "Services", id: "services" },
-    { name: "About Us", id: "about" },
-    { name: "Why Us", id: "why-us" },
-    { name: "FAQ", id: "faq" },
-    { name: "Contact", id: "contact" },
-  ];
-
-  const services = [
-    {
-      icon: Users,
-      title: "IT Talent Supply",
-      description: "Fast, reliable sourcing of prime IT resources across domains (SAP, BigData, App Dev, Testing, Cloud, CyberSecurity).",
-      features: ["Contract Staffing", "Direct Hire / FTE", "C-Level Executive Search", "Project-Based Teams"],
-      color: "from-blue-500/20 to-cyan-500/20",
-      border: "border-blue-500/30",
-    },
-    {
-      icon: ShieldCheck,
-      title: "Cyber Security & Forensics",
-      description: "Comprehensive posture assessment, pentesting, compliance, and forensics from deep-domain experts.",
-      features: ["Vulnerability Assessment", "Cyber Forensics", "Identity & Access (IAM)", "Security Ops Center (SOC)"],
-      color: "from-violet-500/20 to-fuchsia-500/20",
-      border: "border-violet-500/30",
-    },
-    {
-      icon: Server,
-      title: "Enterprise Architecture",
-      description: "Scalable infrastructure and architectural framework planning aligning your IT seamlessly with business goals.",
-      features: ["Cloud Migration", "Infrastructure Design", "System Integration", "Performance Tuning"],
-      color: "from-amber-500/20 to-orange-500/20",
-      border: "border-amber-500/30",
-    },
-    {
-      icon: Cpu,
-      title: "Smart Solutions & AI",
-      description: "Embrace the future with robust ML/AI systems, RPAs, Big Data analytics, and embedded systems.",
-      features: ["Machine Learning Models", "RPA Automation", "Big Data Analytics", "IoT & Embedded"],
-      color: "from-emerald-500/20 to-teal-500/20",
-      border: "border-emerald-500/30",
-    },
-  ];
-
-  const differentiators = [
-    { icon: Rocket, title: "Speed", description: "Expedite time-to-market with ready-to-deploy frameworks and talent networks." },
-    { icon: Shield, title: "Risk Mitigation", description: "Stringent vetting processes and secure-by-design development lifecycles." },
-    { icon: Activity, title: "Scalability", description: "Solutions engineered to grow effortlessly from MVP to Enterprise scale." },
-    { icon: Search, title: "Precision", description: "Exact matching of talent and tech to your highly specific business challenges." },
-  ];
-
-  const faqs = [
-    {
-      question: "What is your typical turnaround time for providing IT candidates?",
-      answer: "We leverage our extensive private talent pool to typically provide initial high-quality resumes within 48 to 72 hours for standard skill sets.",
-    },
-    {
-      question: "Do you offer project-based software development?",
-      answer: "Yes. In addition to staff augmentation, we take end-to-end ownership of software development and system integration projects across various domains.",
-    },
-    {
-      question: "How do you handle security assessments?",
-      answer: "Our certified ethical hackers and forensics specialists conduct deep-dive Vulnerability Assessments and Penetration Testing (VAPT), mimicking real-world attack scenarios to secure your infrastructure.",
-    },
-    {
-      question: "What geographies do you operate in?",
-      answer: "While incorporated in India, we seamlessly run operations and support clients across the Indian Sub-continent and regions of Africa.",
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-[#070b14] text-slate-200 selection:bg-blue-500/30 font-sans overflow-x-hidden">
@@ -186,7 +252,7 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 dark:bg-black/40 backdrop-blur-xl border-b border-slate-200 dark:border-white/10 shadow-sm transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <button onClick={() => scrollToSection("home")} className="flex items-center gap-2 group cursor-pointer">
-            <img src={logoImg} alt="iSHAY Infotech" className="h-12 w-auto object-contain flex-shrink-0 group-hover:scale-105 transition-transform" />
+            <img src={logoImg} alt="iSHAY Infotech" loading="lazy" className="h-12 w-auto object-contain flex-shrink-0 group-hover:scale-105 transition-transform" />
           </button>
 
           {/* Desktop Nav */}
@@ -204,10 +270,10 @@ export default function Home() {
               ))}
             </div>
             <Button
-              className="rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 shadow-[0_0_20px_-5px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_-5px_rgba(37,99,235,0.6)] transition-all"
+              className="group rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 shadow-[0_0_20px_-5px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_-5px_rgba(37,99,235,0.6)] transition-all"
               onClick={() => scrollToSection("contact")}
             >
-              Get Started <ArrowRight className="w-4 h-4 ml-2" />
+              Get Started <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
 
@@ -262,7 +328,14 @@ export default function Home() {
       </nav>
 
       {/* ── HERO SECTION ── */}
-      <section id="home" className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden flex items-center justify-center min-h-[90vh]">
+      <motion.section
+        id="home"
+        className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden flex items-center justify-center min-h-[90vh]"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.25 }}
+        variants={sectionReveal}
+      >
         {/* Ambient Background */}
         <div className="absolute inset-0 bg-[#070b14]">
           <motion.div
@@ -284,11 +357,12 @@ export default function Home() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none opacity-50" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
+        <motion.div
+          className="max-w-7xl mx-auto px-6 relative z-10 text-center"
+          variants={staggerReveal}
+        >
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.8, type: "spring", bounce: 0.5 }}
+            variants={itemReveal}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 font-bold text-xs uppercase tracking-widest backdrop-blur-md mb-8 shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-shadow cursor-default"
           >
             <span className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6] animate-pulse" />
@@ -296,27 +370,21 @@ export default function Home() {
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, type: "spring", stiffness: 50 }}
+            variants={itemReveal}
             className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-8 tracking-tighter text-white drop-shadow-2xl"
           >
             Architecting <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 animate-gradient-x">Digital</span><br className="hidden md:block" /> Solutions
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, type: "spring", stiffness: 50 }}
+            variants={itemReveal}
             className="text-lg md:text-2xl text-slate-300 max-w-3xl mx-auto mb-10 leading-relaxed font-medium"
           >
             iSHAY Infotech delivers top-tier <strong className="text-white font-bold tracking-wide">IT Talent</strong>, <strong className="text-white font-bold tracking-wide">Cyber Security</strong> frameworks, and scalable <strong className="text-white font-bold tracking-wide">Enterprise Systems</strong> directly to your workflow.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6, type: "spring", stiffness: 50 }}
+            variants={itemReveal}
             className="flex flex-col sm:flex-row justify-center gap-4"
           >
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -364,11 +432,18 @@ export default function Home() {
               </motion.div>
             ))}
           </motion.div>
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
       {/* ── SERVICES ── */}
-      <section id="services" className="py-24 bg-white dark:bg-[#030712] relative z-20">
+      <motion.section
+        id="services"
+        className="py-24 bg-white dark:bg-[#030712] relative z-20"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.25 }}
+        variants={sectionReveal}
+      >
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-20">
             <h2 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight text-slate-900 dark:text-white">
@@ -379,15 +454,13 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8" variants={staggerReveal}>
             {services.map((s, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 50, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: i * 0.15, type: "spring", stiffness: 100 }}
+                variants={itemReveal}
                 whileHover={{ y: -10 }}
+                transition={{ type: "spring", stiffness: 100, damping: 18 }}
                 className="group relative p-8 md:p-10 rounded-[2.5rem] bg-white/60 dark:bg-black/20 border border-slate-200/60 dark:border-white/5 hover:border-transparent hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.4)] transition-all duration-500 overflow-hidden backdrop-blur-xl"
               >
                 {/* Hover gradient backdrop */}
@@ -429,12 +502,19 @@ export default function Home() {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── ABOUT US (VISION/MISSION) ── */}
-      <section id="about" className="py-32 bg-white dark:bg-[#070b14] relative overflow-hidden">
+      <motion.section
+        id="about"
+        className="py-32 bg-white dark:bg-[#070b14] relative overflow-hidden"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.25 }}
+        variants={sectionReveal}
+      >
         {/* Background Gradients */}
         <motion.div
           animate={{ rotate: 180, scale: [1, 1.2, 1] }}
@@ -493,10 +573,10 @@ export default function Home() {
 
             {/* Right: Core Philosophy Cards */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.8, ease: "easeOut", staggerChildren: 0.2 }}
+              variants={staggerReveal}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.25 }}
               className="relative space-y-6"
             >
               {/* Highlight backdrop */}
@@ -513,8 +593,7 @@ export default function Home() {
               ].map((item, idx) => (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  variants={itemReveal}
                   whileHover={{ x: -10, scale: 1.02 }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   className="p-6 md:p-8 rounded-[2rem] border border-slate-200/50 dark:border-white/5 bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl shadow-lg shadow-blue-900/5 hover:shadow-[0_30px_60px_-15px_rgba(37,99,235,0.2)] dark:hover:shadow-[0_30px_60px_-15px_rgba(37,99,235,0.15)] hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group flex gap-6 items-start"
@@ -533,10 +612,17 @@ export default function Home() {
             </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── WHY CHOOSE US ── */}
-      <section id="why-us" className="py-24 bg-slate-50 dark:bg-slate-900/50 relative border-t border-slate-200 dark:border-white/5">
+      <motion.section
+        id="why-us"
+        className="py-24 bg-slate-50 dark:bg-slate-900/50 relative border-t border-slate-200/10 dark:border-white/10"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.25 }}
+        variants={sectionReveal}
+      >
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-20">
             <h2 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight text-slate-900 dark:text-white">
@@ -547,7 +633,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          <motion.div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8" variants={staggerReveal}>
             {[
               { icon: CheckCircle2, title: "Expert Team", desc: "Passionate IT specialists with deep domain expertise across security, AI, enterprise, and forensics.", color: "from-blue-500 to-blue-700", shadow: "shadow-blue-500/20" },
               { icon: Clock, title: "Fast Delivery", desc: "High-quality solutions engineered on time. Talent profiles within 72 hours of JD receival.", color: "from-emerald-400 to-emerald-600", shadow: "shadow-emerald-500/20" },
@@ -556,7 +642,7 @@ export default function Home() {
             ].map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 30 }}
+                variants={itemReveal}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ delay: i * 0.1, duration: 0.6, ease: "easeOut" }}
@@ -572,12 +658,18 @@ export default function Home() {
                 <p className="text-[15px] text-slate-500 dark:text-slate-400 leading-relaxed font-medium">{item.desc}</p>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── DOMAIN EXPERTISE ── */}
-      <section className="py-24 bg-white dark:bg-[#01030a]">
+      <motion.section
+        className="py-24 bg-white dark:bg-[#01030a]"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.25 }}
+        variants={sectionReveal}
+      >
         <div className="max-w-5xl mx-auto px-6 overflow-hidden relative pb-10">
           <div className="text-center mb-16 relative z-10">
             <motion.div
@@ -594,21 +686,15 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="relative w-[150%] left-[-25%] flex justify-center mask-image-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)] pointer-events-none">
+          <div className="relative w-[150%] left-[-25%] flex justify-center mask-image-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)] pointer-events-none overflow-hidden">
             <motion.div
-              animate={{ x: [0, -1000] }}
-              transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{ repeat: Infinity, ease: "linear", duration: 32 }}
               className="flex flex-wrap flex-col h-[280px] content-start gap-4 md:gap-5 w-[max-content] pb-8 pr-10"
             >
-              {[
-                "BigData", "SAP", "Data Science", "Machine Learning", "RPA", "DevOps",
-                "Full Stack", "Python", "Java", ".NET", "Cybersecurity", "Cloud Architecture", "Finance Tech",
-                "FinTech", "Accounting", "HR Systems", "MarTech", "Logistics", "Operations",
-                "Smart Solutions", "SaaS Development", "Backend Infra", "IT Assessment", "AWS", "Azure",
-                "GCP", "Agile Management", "Data Warehousing", "IoT Integration"
-              ].map((tag, i) => (
+              {domainExpertiseTags.concat(domainExpertiseTags).map((tag, i) => (
                 <motion.span
-                  whileHover={{ scale: 1.1, backgroundColor: "#3b82f6", color: "white" }}
+                  whileHover={{ scale: 1.05, backgroundColor: "#3b82f6", color: "white" }}
                   key={`${tag}-${i}`}
                   className="px-6 py-3 rounded-full border-2 border-slate-200/60 dark:border-white/10 bg-white/40 dark:bg-white/[0.03] backdrop-blur-xl text-[14px] font-bold text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:shadow-[0_0_30px_-5px_rgba(37,99,235,0.6)] cursor-crosshair transition-colors duration-300 w-max pointer-events-auto"
                 >
@@ -618,10 +704,17 @@ export default function Home() {
             </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── FAQ ── */}
-      <section id="faq" className="py-24 bg-slate-50 dark:bg-[#030712] border-y border-slate-200 dark:border-white/5 relative">
+      <motion.section
+        id="faq"
+        className="py-24 bg-slate-50 dark:bg-[#030712] border-y border-slate-200/10 dark:border-white/10 relative"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.25 }}
+        variants={sectionReveal}
+      >
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-500/5 dark:bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="max-w-4xl mx-auto px-6 relative z-10">
@@ -675,10 +768,17 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── CONTACT ── */}
-      <section id="contact" className="py-32 bg-white dark:bg-[#02050f] relative overflow-hidden">
+      <motion.section
+        id="contact"
+        className="py-32 bg-white dark:bg-[#02050f] relative overflow-hidden"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.25 }}
+        variants={sectionReveal}
+      >
         {/* Glow */}
         <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
@@ -849,7 +949,7 @@ export default function Home() {
             </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── FOOTER ── */}
       <footer className="bg-slate-50 dark:bg-[#01040a] border-t border-slate-200 dark:border-white/5 py-16">
@@ -857,7 +957,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-6 opacity-90 hover:opacity-100 transition-opacity">
-                <img src={logoImg} alt="iSHAY Infotech" className="h-12 md:h-14 w-auto object-contain flex-shrink-0" />
+                <img src={logoImg} alt="iSHAY Infotech" loading="lazy" className="h-12 md:h-14 w-auto object-contain flex-shrink-0" />
                 <span className="text-[11px] font-bold text-slate-500 tracking-[0.2em] uppercase mt-1">
                   Pvt Ltd
                 </span>
