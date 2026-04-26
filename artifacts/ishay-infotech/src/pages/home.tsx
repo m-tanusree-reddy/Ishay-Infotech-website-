@@ -438,13 +438,14 @@ export default function Home() {
       {/* ── SERVICES ── */}
       <motion.section
         id="services"
-        className="py-24 bg-white dark:bg-[#030712] relative z-20"
+        className="py-24 bg-white dark:bg-[#030712] relative z-20 overflow-hidden"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.25 }}
         variants={sectionReveal}
       >
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="absolute inset-x-0 -top-12 h-32 bg-gradient-to-b from-[#070b14]/90 via-[#0f172a]/30 to-white pointer-events-none z-0" />
+        <div className="relative z-10 max-w-7xl mx-auto px-6 pt-16">
           <div className="text-center max-w-3xl mx-auto mb-20">
             <h2 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight text-slate-900 dark:text-white">
               Excellence Through Engineering.
