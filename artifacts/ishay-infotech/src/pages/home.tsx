@@ -177,7 +177,7 @@ const quickLinks = [
 
 const sectionReveal = {
   hidden: { opacity: 0, y: 40 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.9, ease: "easeOut" } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.9 } },
 };
 
 const staggerReveal = {
@@ -187,7 +187,7 @@ const staggerReveal = {
 
 const itemReveal = {
   hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7 } },
 };
 
 export default function Home() {
@@ -293,7 +293,7 @@ export default function Home() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
+              transition={{ duration: 0.3, ease: [0.42, 0, 0.58, 1] }}
               className="md:hidden overflow-hidden bg-white dark:bg-[#070b14] border-b border-slate-200 dark:border-white/10"
             >
               <div className="px-6 py-6 flex flex-col gap-4">
@@ -343,7 +343,7 @@ export default function Home() {
               scale: [1, 1.2, 1],
               opacity: [0.3, 0.5, 0.3],
             }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: 8, repeat: Infinity, ease: [0.42, 0, 0.58, 1] }}
             className="absolute top-1/4 -left-1/4 w-[800px] h-[800px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none mix-blend-screen"
           />
           <motion.div
@@ -351,7 +351,7 @@ export default function Home() {
               scale: [1, 1.3, 1],
               opacity: [0.2, 0.4, 0.2],
             }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            transition={{ duration: 10, repeat: Infinity, ease: [0.42, 0, 0.58, 1], delay: 1 }}
             className="absolute -bottom-1/4 -right-1/4 w-[800px] h-[800px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none mix-blend-screen"
           />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none opacity-50" />
@@ -519,7 +519,7 @@ export default function Home() {
         {/* Background Gradients */}
         <motion.div
           animate={{ rotate: 180, scale: [1, 1.2, 1] }}
-          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 40, repeat: Infinity, ease: [0.25, 0.25, 0.75, 0.75] }}
           className="absolute -left-64 top-0 w-[800px] h-[800px] bg-blue-500/5 dark:bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"
         />
 
@@ -530,7 +530,7 @@ export default function Home() {
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
               <motion.div
                 whileHover={{ scale: 1.05 }}
@@ -583,7 +583,7 @@ export default function Home() {
               {/* Highlight backdrop */}
               <motion.div
                 animate={{ rotate: [12, -12, 12], scale: [1, 1.1, 1] }}
-                transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+                transition={{ duration: 15, repeat: Infinity, ease: [0.42, 0, 0.58, 1] }}
                 className="absolute top-1/4 right-1/4 w-3/4 h-3/4 bg-blue-600/10 dark:bg-blue-400/10 rounded-[60px] blur-3xl -z-10 mix-blend-multiply dark:mix-blend-screen"
               />
 
@@ -646,7 +646,7 @@ export default function Home() {
                 variants={itemReveal}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ delay: i * 0.1, duration: 0.6, ease: "easeOut" }}
+                transition={{ delay: i * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 className="group p-8 rounded-[2rem] bg-white dark:bg-black/30 border border-slate-200 dark:border-white/5 hover:border-transparent hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_20px_40px_-15px_rgba(255,255,255,0.05)] hover:-translate-y-2 transition-all duration-500 relative overflow-hidden"
               >
                 {/* Glowing hover backdrop */}
@@ -690,7 +690,7 @@ export default function Home() {
           <div className="relative w-[150%] left-[-25%] flex justify-center mask-image-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)] pointer-events-none overflow-hidden">
             <motion.div
               animate={{ x: ["0%", "-50%"] }}
-              transition={{ repeat: Infinity, ease: "linear", duration: 32 }}
+              transition={{ repeat: Infinity, ease: [0.25, 0.25, 0.75, 0.75], duration: 32 }}
               className="flex flex-wrap flex-col h-[280px] content-start gap-4 md:gap-5 w-[max-content] pb-8 pr-10"
             >
               {domainExpertiseTags.concat(domainExpertiseTags).map((tag, i) => (
@@ -756,7 +756,7 @@ export default function Home() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      transition={{ duration: 0.3, ease: [0.42, 0, 0.58, 1] }}
                       className="overflow-hidden px-8"
                     >
                       <p className="pb-6 pt-2 text-[16px] text-slate-600/90 dark:text-slate-400 leading-relaxed font-medium">
@@ -783,12 +783,12 @@ export default function Home() {
         {/* Glow */}
         <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 10, repeat: Infinity, ease: [0.42, 0, 0.58, 1] }}
           className="absolute bottom-0 left-1/2 w-[800px] h-[400px] bg-blue-600/10 dark:bg-blue-600/20 rounded-[100%] blur-[100px] -translate-x-1/2 translate-y-1/2 pointer-events-none z-0"
         />
         <motion.div
           animate={{ scale: [1, 1.1, 1], rotate: [0, 90, 0] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 20, repeat: Infinity, ease: [0.25, 0.25, 0.75, 0.75] }}
           className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none z-0"
         />
 
