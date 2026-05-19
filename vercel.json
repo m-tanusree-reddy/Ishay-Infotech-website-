@@ -1,11 +1,4 @@
 {
   "installCommand": "corepack enable && pnpm install --frozen-lockfile",
-  "buildCommand": "PORT=3000 BASE_PATH=/ corepack pnpm --filter @workspace/ishay-infotech run build",
-  "outputDirectory": "artifacts/ishay-infotech/dist/public",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+  "buildCommand": "corepack pnpm exec node scripts/build-vercel.mjs"
 }
