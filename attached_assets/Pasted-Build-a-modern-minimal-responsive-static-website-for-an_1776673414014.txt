@@ -1,0 +1,92 @@
+Build a modern, minimal, responsive static website for an IT services company named “Ishay Infotech Pvt Ltd”.
+
+IMPORTANT:
+
+Use the uploaded company profile PDF to extract accurate content (services, about, tone, expertise).
+Use the uploaded design screenshot as UI inspiration and closely match its layout, spacing, and modern SaaS style.
+
+🎨 DESIGN REQUIREMENTS:
+
+Style: Clean, minimal, modern SaaS landing page
+Color theme: Blue gradient with subtle tech/cybersecurity feel
+Include soft shadows, rounded cards, and smooth spacing
+Use modern fonts (Inter or Poppins)
+Add subtle animations (hover effects, smooth scrolling)
+Fully responsive (mobile + tablet + desktop)
+
+🧱 WEBSITE STRUCTURE (FOLLOW THIS EXACT ORDER):
+
+Hero Section:
+Headline: “Secure & Scale Your Business with Smart IT Solutions”
+Subtext based on company profile (cybersecurity, AI/ML, enterprise solutions)
+Two CTA buttons: “Get Started” and “Contact Us”
+Background: gradient or abstract tech pattern
+Trust / Stats Section:
+Show 3–4 metrics like:
+Trusted IT Experts
+Fast Deployment
+Scalable Solutions
+Services Section (Cards):
+Extract from company PDF and display 4–6 services:
+Information Security
+Digital Forensics
+Enterprise Solutions
+AI & Machine Learning
+IT Staffing
+
+Each card must include:
+
+Icon
+Title
+Short description (rewrite professionally, not copied raw text)
+About Section:
+Write a clean, concise paragraph based on the company profile
+Focus on helping businesses digitize, secure, and scale operations
+Why Choose Us Section:
+3–4 feature highlights:
+Expert Team
+Fast Delivery
+Reliable & Secure Solutions
+Customer-focused approach
+Contact Section (MOST IMPORTANT):
+Create a modern, centered contact form UI (card style)
+Fields:
+Name
+Email
+Company
+Message
+Add a submit button with hover effects
+
+⚙️ FORM FUNCTIONALITY (CRITICAL):
+
+When user submits the form:
+Send data to Google Drive using Google Apps Script or Google Forms integration
+Show a success message (“Message sent successfully!”)
+Provide clean JavaScript for handling submission
+Footer:
+Company name
+Email (from company profile if available)
+Minimal links
+
+💻 TECH REQUIREMENTS:
+
+Use only HTML, CSS, and vanilla JavaScript
+No heavy frameworks
+Separate files:
+index.html
+style.css
+script.js
+Clean, readable, well-structured code
+
+✨ EXTRA REQUIREMENTS:
+
+Add hover effects on buttons and cards
+Use icons (cybersecurity, AI, cloud themes)
+Keep UI premium and not generic
+Optimize for fast loading
+
+🔥 AFTER BUILD:
+Also provide:
+
+Step-by-step instructions to connect the form to Google Apps Script
+Sample Apps Script code to store submissions in Google Drive / Google Sheets
