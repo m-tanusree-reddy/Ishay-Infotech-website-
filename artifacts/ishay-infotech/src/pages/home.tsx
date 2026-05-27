@@ -531,10 +531,12 @@ export default function Home() {
 
   const scrollToSection = useCallback((id: string) => {
     setMobileMenuOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    setTimeout(() => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 300);
   }, []);
 
   const toggleServiceDetails = (index: number) => {
@@ -549,7 +551,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#eef3f9] text-slate-900 selection:bg-blue-500/30 font-sans overflow-x-hidden">
       {/* ── NAVBAR ── */}
-      <nav className="fixed top-4 left-1/2 z-50 w-[calc(100%-2rem)] max-w-7xl -translate-x-1/2 rounded-[2rem] bg-white border border-slate-200 shadow-xl backdrop-blur-xl transition-all duration-300">
+      <nav className="fixed top-4 left-1/2 z-50 w-[calc(100%-2rem)] max-w-7xl -translate-x-1/2 rounded-[2rem] bg-white dark:bg-slate-950/95 border border-slate-200 dark:border-slate-800 shadow-xl backdrop-blur-xl transition-all duration-300">
         <div className="mx-auto px-6 h-20 flex items-center justify-between">
           <button onClick={() => scrollToSection("home")} className="flex items-center gap-2 group cursor-pointer">
             <img src={logoImg} alt="iSHAY Infotech" loading="lazy" className="h-20 w-auto object-contain flex-shrink-0 group-hover:scale-105 transition-transform" />
@@ -594,7 +596,7 @@ export default function Home() {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.3, ease: [0.42, 0, 0.58, 1] }}
-              className="md:hidden overflow-hidden bg-white border-b border-slate-200"
+              className="md:hidden overflow-hidden bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800"
             >
               <div className="px-6 py-6 flex flex-col gap-4">
                 {navLinks.map((link, idx) => (
