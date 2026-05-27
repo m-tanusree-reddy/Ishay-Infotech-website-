@@ -638,7 +638,7 @@ export default function Home() {
         }}
         className="relative pt-32 pb-16 md:pt-44 md:pb-24 overflow-hidden flex items-center justify-center min-h-[92vh]"
         initial="hidden"
-        whileInView="show"
+        animate="show"
         viewport={{ once: true, amount: 0.25 }}
         variants={sectionReveal}
       >
@@ -764,7 +764,7 @@ export default function Home() {
         id="services"
         className={`${sectionShell} z-20 py-16 md:py-20`}
         initial="hidden"
-        whileInView="show"
+        animate="show"
         viewport={{ once: true, amount: 0.25 }}
         variants={sectionReveal}
       >
@@ -815,7 +815,7 @@ export default function Home() {
                     {(expandedServices[i] ? s.features : s.features.slice(0, 6)).map((feature, idx) => (
                       <motion.div
                         initial={{ opacity: 0, x: -10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        animate={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.3 + (idx * 0.1) }}
                         key={idx}
@@ -850,7 +850,7 @@ export default function Home() {
         id="about"
         className={`${sectionShell} py-16 md:py-20`}
         initial="hidden"
-        whileInView="show"
+        animate="show"
         viewport={{ once: true, amount: 0.25 }}
         variants={sectionReveal}
       >
@@ -866,7 +866,7 @@ export default function Home() {
             {/* Left: Content */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              animate={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
@@ -991,7 +991,7 @@ export default function Home() {
                 {aboutStats.map((stat, idx) => (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.1, duration: 0.5 }}
                     key={stat.label}
                     className="flex flex-col gap-1"
@@ -1007,7 +1007,7 @@ export default function Home() {
             <motion.div
               variants={staggerReveal}
               initial="hidden"
-              whileInView="show"
+              animate="show"
               viewport={{ once: true, amount: 0.25 }}
               className="relative space-y-6"
             >
@@ -1061,7 +1061,7 @@ export default function Home() {
         id="why-us"
         className={`${sectionShell} py-16 md:py-20 border-t border-slate-300/70 dark:border-white/10`}
         initial="hidden"
-        whileInView="show"
+        animate="show"
         viewport={{ once: true, amount: 0.25 }}
         variants={sectionReveal}
       >
@@ -1100,7 +1100,7 @@ export default function Home() {
       <motion.section
         className={`${sectionShell} py-12 md:py-14 border-t border-slate-300/70 dark:border-white/10`}
         initial="hidden"
-        whileInView="show"
+        animate="show"
         viewport={{ once: true, amount: 0.25 }}
         variants={sectionReveal}
       >
@@ -1108,7 +1108,7 @@ export default function Home() {
           <div className="text-center mb-10 relative z-10">
             <motion.div
               initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
+              animate={{ scale: 1 }}
               viewport={{ once: true }}
               className="inline-flex mb-4 bg-slate-900 dark:bg-white text-white dark:text-black rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest shadow-xl"
             >
@@ -1145,7 +1145,7 @@ export default function Home() {
         id="faq"
         className={`${sectionShell} py-16 md:py-20 border-y border-slate-300/70 dark:border-white/10`}
         initial="hidden"
-        whileInView="show"
+        animate="show"
         viewport={{ once: true, amount: 0.25 }}
         variants={sectionReveal}
       >
@@ -1166,7 +1166,7 @@ export default function Home() {
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                animate={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
                 className={`${cardSurface} mb-4`}
@@ -1209,7 +1209,7 @@ export default function Home() {
         id="contact"
         className={`${sectionShell} py-16 md:py-24`}
         initial="hidden"
-        whileInView="show"
+        animate="show"
         viewport={{ once: true, amount: 0.25 }}
         variants={sectionReveal}
       >
@@ -1229,7 +1229,7 @@ export default function Home() {
           <div className="text-center max-w-2xl mx-auto mb-12 md:mb-14">
             <motion.div
               initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
+              animate={{ scale: 1 }}
               viewport={{ once: true }}
               className="inline-flex mb-6 bg-slate-900 dark:bg-white text-white dark:text-black rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest shadow-xl"
             >
@@ -1247,7 +1247,7 @@ export default function Home() {
             {/* Contact Info container */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              animate={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
               className="space-y-5"
@@ -1285,7 +1285,7 @@ export default function Home() {
             {/* Form */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              animate={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               whileHover={{ y: -5 }}
               transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
