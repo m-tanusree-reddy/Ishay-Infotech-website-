@@ -37,7 +37,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
-import logoImg from "@/assets/logo.jpeg";
 import logoMark from "@/assets/logo-mark.png";
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzz6XbF273YvLmsO2Y-gqfQfP0aE1pBwED_87TqC1O8sH9Z7yYkHhPxrG_KxNYY1wL4/exec";
@@ -553,8 +552,12 @@ export default function Home() {
       {/* ── NAVBAR ── */}
       <nav className="fixed top-4 left-1/2 z-50 w-[calc(100%-2rem)] max-w-7xl -translate-x-1/2 rounded-[2rem] bg-white dark:bg-slate-950/95 border border-slate-200 dark:border-slate-800 shadow-xl backdrop-blur-xl transition-all duration-300">
         <div className="mx-auto px-6 h-20 flex items-center justify-between">
-          <button onClick={() => scrollToSection("home")} className="flex items-center gap-2 group cursor-pointer">
-            <img src={logoImg} alt="iSHAY Infotech" loading="lazy" className="h-20 w-auto object-contain flex-shrink-0 group-hover:scale-105 transition-transform" />
+          <button onClick={() => scrollToSection("home")} className="flex items-center gap-3 group cursor-pointer">
+            <img src="/logo.jpeg" alt="iSHAY Infotech" loading="lazy" className="h-12 md:h-14 w-auto object-contain flex-shrink-0 group-hover:scale-105 transition-transform" />
+            <div className="flex flex-col text-left leading-none">
+              <span className="text-[20px] md:text-[24px] font-black uppercase text-blue-900 dark:text-blue-100 tracking-tight">iSHAY INFOTECH</span>
+              <span className="text-[11px] md:text-[13px] font-bold text-red-700 dark:text-red-500 uppercase tracking-widest mt-1">Excellence Assured</span>
+            </div>
           </button>
 
           {/* Desktop Nav */}
@@ -1392,10 +1395,11 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-6 opacity-90 hover:opacity-100 transition-opacity">
-                <img src={logoImg} alt="iSHAY Infotech" loading="lazy" className="h-12 md:h-14 w-auto object-contain flex-shrink-0" />
-                <span className="text-[11px] font-bold text-slate-500 tracking-[0.2em] uppercase mt-1">
-                  Pvt Ltd
-                </span>
+                <img src="/logo.jpeg" alt="iSHAY Infotech" loading="lazy" className="h-10 md:h-12 w-auto object-contain flex-shrink-0" />
+                <div className="flex flex-col text-left leading-none">
+                  <span className="text-[18px] md:text-[20px] font-black uppercase text-blue-900 dark:text-blue-100 tracking-tight">iSHAY INFOTECH</span>
+                  <span className="text-[10px] md:text-[11px] font-bold text-red-700 dark:text-red-500 uppercase tracking-widest mt-1">Excellence Assured</span>
+                </div>
               </div>
               <p className="max-w-sm mb-6 leading-relaxed font-medium text-slate-600 dark:text-slate-400">
                 Pioneering innovation across the Indian Sub-continent and Africa. Delivering excellence in Cybersecurity, AI, and IT Solutions.
